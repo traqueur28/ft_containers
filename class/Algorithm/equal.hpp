@@ -6,7 +6,7 @@
 /*   By: jgourlin <jgourlin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 10:59:16 by jgourlin          #+#    #+#             */
-/*   Updated: 2022/08/11 02:38:12 by jgourlin         ###   ########.fr       */
+/*   Updated: 2022/08/19 16:57:47 by jgourlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ namespace ft
     bool    equal(T first1, T last1, U first2, V pred)
     {
         for (; first1 != last1; ++first1, ++first2)
-            if (!p(*first1, *first2))
+            if (!pred(*first1, *first2))
                 return (false);
         return (true);
     }

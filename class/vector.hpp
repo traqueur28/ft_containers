@@ -6,7 +6,7 @@
 /*   By: jgourlin <jgourlin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 11:00:47 by jgourlin          #+#    #+#             */
-/*   Updated: 2022/08/19 18:12:26 by jgourlin         ###   ########.fr       */
+/*   Updated: 2022/08/20 23:42:56 by jgourlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@
 
 // https://cplusplus.com/reference/memory/allocator/
 
+# include <memory>
+# include <iostream>
+
 # include "Iterator/reverse_iterator.hpp"
 # include "Iterator/random_access_iterator.hpp"
 
@@ -27,7 +30,6 @@
 # include "Type_traits/enable_if.hpp"
 # include "Type_traits/is_integral.hpp"
 
-# include <memory>
 
 namespace ft
 {
@@ -44,7 +46,8 @@ namespace ft
 			typedef typename allocator_type::const_pointer		const_pointer;
 
 			typedef ft::random_access_iterator<T>			iterator;
-			typedef ft::random_access_iterator<const T>	const_iterator;
+			typedef ft::random_access_iterator<const T>		const_iterator;
+
 			typedef ft::reverse_iterator<iterator>			reverse_iterator;
 			typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 
@@ -55,11 +58,14 @@ namespace ft
 
 			//Default
 			explicit vector (const allocator_type& alloc = allocator_type())
-			: _alloc(alloc), _ptr(NULL), _size(0), _capacity(0) {}	
-
+			: _alloc(alloc), _ptr(_alloc.allocate(0)), _size(0), _capacity(0) {}
+			
 			//FIll
-			explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type())
-			: _alloc(alloc), _ptr(NULL), _capacity(n), _size(n)
+			explicit vector (
+				size_type n,
+				const value_type& val = value_type(),
+				const allocator_type& alloc = allocator_type())
+			: _alloc(alloc), _ptr(NULL), _size(n), _capacity(n)
 			{
 				_ptr = _alloc.allocate(n);
 				for (size_type i = 0; i < n; i++)
@@ -68,21 +74,21 @@ namespace ft
 
 			//Range
 			template <class InputIterator>
-         	vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type())
+         	vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type* = NULL)
 			: _alloc(alloc), _ptr(NULL), _size(0), _capacity(0)
 			{
 				size_type	n = last - first;
 				
 				reserve(n);
 				for (size_type i = 0; i < n; i++)
-					_alloc.construct(_ptr + 1, *(first + i));
+					_alloc.construct(_ptr + i, *(first + i));
 				_size = n;
 			}
 
 			//Copy
-			vector (const vector& x): _alloc(x._alloc), _ptr(NULL), _size(x._size), _capacity(x.capacity)
+			vector (const vector& x): _alloc(x._alloc), _ptr(NULL), _size(x._size), _capacity(x._size)
 			{
-				_ptr = _alloc.allocate(x.capacity());
+				_ptr = _alloc.allocate(x.size());
 				for (size_type i = 0; i < _size; i++)
 					_alloc.construct(_ptr + i, x._ptr[i]);
 			}
@@ -113,14 +119,14 @@ namespace ft
 				return (iterator(_ptr));
 			}
 			const_iterator begin() const{
-				return (iterator(_ptr));
+				return (const_iterator(_ptr));
 			}
 
 			iterator end(){
 				return (iterator(_ptr + _size));
 			}
 			const_iterator end() const{
-				return (iterator(_ptr + _size));
+				return (const_iterator(_ptr + _size));
 			}
 
 			reverse_iterator rbegin(){
@@ -156,7 +162,8 @@ namespace ft
 				}
 				else if (n > _size)
 				{
-					reserve(n);
+					if (n > _capacity)
+						_Augment_capacity(n);
 					for (size_type i = _size; i < n; i++)
 						_alloc.construct(_ptr + i, val);
 				}
@@ -174,7 +181,7 @@ namespace ft
 			void reserve (size_type n)
 			{
 				if (n > max_size())
-					throw std::length_error("vector::reserve");
+					throw std::length_error("allocator<T>::allocate(size_t n) 'n' exceeds maximum supported size");
 				if (n > _capacity)
 				{
 					pointer tmp = _alloc.allocate(n);
@@ -183,7 +190,7 @@ namespace ft
 						_alloc.construct(tmp + i, _ptr[i]);
 						_alloc.destroy(_ptr + i);
 					}
-					_alloc.desallocate(_ptr, _capacity);
+					_alloc.deallocate(_ptr, _capacity);
 					_ptr = tmp;
 					_capacity = n;
 				}
@@ -202,9 +209,7 @@ namespace ft
 			{
 				if (n >= _size)
 				{
-					throw std::out_of_range(
-						std::string("vector::at error n >= size");
-					)
+					throw std::out_of_range("vector");
 				}
 				return (_ptr[n]);
 			}
@@ -212,9 +217,7 @@ namespace ft
 			{
 				if (n >= _size)
 				{
-					throw std::out_of_range(
-						std::string("vector::at error n >= size");
-					)
+					throw std::out_of_range("vector");
 				}
 				return (_ptr[n]);
 			}
@@ -223,7 +226,7 @@ namespace ft
 				return (_ptr[0]);
 			}
 			const_reference front() const{
-				return (_ptr[n]);
+				return (_ptr[0]);
 			}
 
 			reference back(){
@@ -244,7 +247,7 @@ namespace ft
 			// Modifiers:
 
 			template <class InputIterator>
-  			void assign (InputIterator first, InputIterator last) // range
+  			void assign (InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL) // range
 			{
 				size_type n = last - first;
 
@@ -252,7 +255,7 @@ namespace ft
 				for (size_type i = 0; i < n; i++)
 				{
 					_alloc.destroy(_ptr + i);
-					_alloc.contruct(_ptr + i, *(first + i));
+					_alloc.construct(_ptr + i, *(first + i));
 				}
 				_size = n;
 			}
@@ -263,7 +266,7 @@ namespace ft
 				for (size_type i = 0; i < n; i++)
 				{
 					_alloc.destroy(_ptr + i);
-					_alloc.contruct(_ptr + i, val);
+					_alloc.construct(_ptr + i, val);
 				}
 				_size = n;
 
@@ -271,10 +274,20 @@ namespace ft
 
 			void push_back (const value_type& val)
 			{
+
+				// size_type new_cap;
+
+				// if (_size == 0)
+				// 	new_cap = 1;
+				// else
+				// 	new_cap = _size * 2;
+				// if (_size == _capacity)
+				// 	reserve(new_cap);
+
 				if (_size + 1 > _capacity)
 					_Augment_capacity(_size + 1);
-				_alloc.construct(_ptr + _size, val);
-				_size++;
+				 _alloc.construct(_ptr + _size, val);
+				 _size++;
 			}
 
 			void pop_back()
@@ -286,31 +299,30 @@ namespace ft
 
 			iterator insert (iterator position, const value_type& val) // single element
 			{
-				size_type	n = position - begin();
+				size_type n = position - begin();
 
 				if (_size + 1 > _capacity)
 					_Augment_capacity(_size + 1);
 				_Replace_right(n, 1);
-				_alloc.construct(_ptr + pos, val);
+				_alloc.construct(_ptr + n, val);
 				_size++;
-				return (_ptr);
+				return iterator(_ptr);
 			}
 
     		void insert (iterator position, size_type n, const value_type& val) // fill
-			{
+			{				
 				size_type	pos = position - begin();
 
 				if (_size + n > _capacity)
 					_Augment_capacity(_size + n);
 				_Replace_right(pos, n);
-				while (n--)
-					_alloc.construct(_ptr + pos++, val);
-				_size -= n;
-				return (_ptr);
+				for (size_type i = 0; i < n; i++)
+					_alloc.construct(&_ptr[pos + i], val);
+				_size += n;
 			}
 
 			template <class InputIterator>
-    		void insert (iterator position, InputIterator first, InputIterator last) // range
+    		void insert (iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL) // range
 			{
 				size_type	pos = position - begin();
 				size_type	n = last - first;
@@ -318,13 +330,12 @@ namespace ft
 				if (_size + n > _capacity)
 					_Augment_capacity(_size + n);
 				_Replace_right(pos, n);
-				while (n--)
+				for (size_type i = 0; i < n; i++)
 				{
-					_alloc.construct(_ptr + pos++, *first);
+					_alloc.construct(_ptr + pos + i, *first);
 					first++;
 				}
-				_size -= n;
-				return (_ptr);
+				_size += n;
 			}
 
 			iterator erase (iterator position){
@@ -333,7 +344,7 @@ namespace ft
 				_alloc.destroy(_ptr + n);
 				_Replace_left(n, 1);
 				_size--;
-				return (_ptr + n);
+				return iterator(_ptr + n);
 			}
 			iterator erase (iterator first, iterator last){
 				size_type	deb = first - begin();
@@ -346,7 +357,7 @@ namespace ft
 				}
 				_Replace_left(deb, end - deb);
 				_size -= n;
-				return (_ptr + n);
+				return iterator(_ptr + n);
 			}
 
 			void swap (vector& x)
@@ -372,9 +383,6 @@ namespace ft
 			}
 
 
-
-
-
 			private:
 				allocator_type	_alloc;
 				pointer			_ptr;
@@ -383,31 +391,39 @@ namespace ft
 
 				void	_Augment_capacity(size_type n)
 				{
-					if (!_capacity)
-						_capacity = 1;
-					while (_capacity < n)
-						_capacity *= 2;
-					reserve(_capacity);
+					size_type res = _capacity;
+
+					if (!res)
+						res = 1;
+					if (res < n)
+						res = res * 2;
+					if (n > res)
+						reserve (n);
+					else
+						reserve(res);
 				}
 
 				void	_Replace_right(size_type deb, size_type n)
 				{
 					size_type	i = _size - 1;
 
-					while (i >= pos && i)
+					while (i >= deb)
 					{
 						_alloc.construct(_ptr + i + n, _ptr[i]);
 						_alloc.destroy(_ptr + i);
+						if (!i)
+							break;
 						i--;
 					}
 				}
 
 				void	_Replace_left(size_type deb, size_type n)
 				{
-					while (deb < _size && pos + n < _capacity; pos++)
+					while (deb < _size && deb + n < _capacity)
 					{
-						_alloc.contruct(_ptr + deb, _ptr[deb + n]);
-						_alloc.destroy(_ptr + pos + n);
+						_alloc.construct(_ptr + deb, _ptr[deb + n]);
+						_alloc.destroy(_ptr + deb + n);
+						deb++;
 					}
 				}
 	};

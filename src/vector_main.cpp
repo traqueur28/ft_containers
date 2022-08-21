@@ -6,7 +6,7 @@
 /*   By: jgourlin <jgourlin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/20 14:14:18 by jgourlin          #+#    #+#             */
-/*   Updated: 2022/08/21 00:08:10 by jgourlin         ###   ########.fr       */
+/*   Updated: 2022/08/21 21:45:28 by jgourlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,23 +46,10 @@ void	vector_print(PRE::vector<int> &vec)
 	std::cout << "   Is empty ? " << vec.empty() << std::endl;
 }
 
-void	vector_test(PRE::vector<int> &vec)
-{
-	std::cout << "size: " <<vec.size();
-	std::cout << "   capacity: " << vec.capacity() << std::endl;
-
-	vec.push_back(28);
-
-	std::cout << "size: " <<vec.size();
-	std::cout << "   capacity: " << vec.capacity() << std::endl;
-}
-
-
-bool	vector_main()
+void	vector_main()
 {
 	
 	title("VECTOR", RED__, 0);
-	std::cout << CHECK << std::endl;
 
 	// Constructor
 	title("Constructor", CYAN_, 1);
@@ -247,7 +234,7 @@ bool	vector_main()
 		int tab [] = { 501,502,503 };
 
 		vector_print(alpha);
-		alpha.insert(it + 2, 8);
+		std::cout << "   " << *alpha.insert(it + 2, 8) << std::endl;
 		vector_print(alpha);
 		alpha.insert(it + 3, 5, 42);
 		vector_print(alpha);
@@ -255,6 +242,20 @@ bool	vector_main()
 		vector_print(alpha);
 		alpha.insert(alpha.begin() + 2 , tab, tab + 3);
 		vector_print(alpha);
+
+		std::cout << std::endl;
+		PRE::vector<int>	charl;
+
+		vector_print(charl);
+		charl.insert(charl.end(), 8);
+		vector_print(charl);
+		charl.insert(charl.begin(), 4, 42);
+		vector_print(charl);
+		charl.insert(charl.end() - 3, 6, -42);
+		vector_print(charl);
+		charl.insert(charl.begin() + 2 , tab, tab + 3);
+		vector_print(charl);
+
 
 		title("Erase", PURPL, 3);
 		alpha.erase(alpha.begin());
@@ -401,5 +402,5 @@ bool	vector_main()
 		else
 			std::cout << "false" << std::endl;
 	}
-	return (true);
+	title("END VECTOR", RED__, 0);
 }

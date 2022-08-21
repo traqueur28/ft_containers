@@ -6,7 +6,7 @@
 /*   By: jgourlin <jgourlin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 10:54:02 by jgourlin          #+#    #+#             */
-/*   Updated: 2022/08/18 12:21:54 by jgourlin         ###   ########.fr       */
+/*   Updated: 2022/08/21 23:41:58 by jgourlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,17 @@ namespace ft
 	class reverse_iterator
 	{
 		public:
-			typedef It	iterator_type;
-			typedef typename ft::iterator_traits<It>::iterator_category iterator_category;
-			typedef typename ft::iterator_traits<It>::value_type value_type;
-			typedef typename ft::iterator_traits<It>::difference_type difference_type;
-			typedef typename ft::iterator_traits<It>::pointer pointer;
-			typedef typename ft::iterator_traits<It>::reference reference;
+			typedef				It	iterator_type;
+			typedef typename	ft::iterator_traits<It>::iterator_category iterator_category;
+			typedef typename	ft::iterator_traits<It>::value_type 		value_type;
+			typedef typename	ft::iterator_traits<It>::difference_type 	difference_type;
+			typedef typename	ft::iterator_traits<It>::pointer 			pointer;
+			typedef typename	ft::iterator_traits<It>::reference 		reference;
+			// typedef typename	std::random_access_iterator_tag					iterator_category;
+			// typedef typename	iterator_traits<It>::difference_type			difference_type;
+			// typedef typename	iterator_traits<It>::value_type				value_type; //T
+			// typedef typename	iterator_traits<It>::pointer					pointer;    //T* ou const T* ...
+			// typedef typename	iterator_traits<It>::reference				reference;
 			
 			//Default Constructor
 			reverse_iterator(void) : _ptr(iterator_type()){}
@@ -40,8 +45,11 @@ namespace ft
 
 			//Copy Constructor
 			
+			reverse_iterator(const reverse_iterator &other){
+				_ptr = other._ptr;
+			}
 			template< class U >
-			reverse_iterator(const reverse_iterator<U>& other){
+			reverse_iterator(const reverse_iterator<U> &other){
 				_ptr = other.base();
 			}
 
@@ -51,7 +59,7 @@ namespace ft
 			//Operator
 			template< class U >
 			reverse_iterator	&operator=(const reverse_iterator<U>& other ){
-				_ptr = other._ptr;
+				_ptr = other.base();
 				return (*this);
 			}
 			
@@ -65,17 +73,20 @@ namespace ft
 
 			reference	operator*() const{
 				iterator_type	tmp = _ptr;
-				return *(--tmp);
+				tmp--;
+				return *(tmp);
 			}
 
 			pointer		operator->() const{
-				return &(operator*());
+				iterator_type	tmp = base();
+				tmp--;
+				return (tmp);
 			}
 
 			//Accesses an element by index
 
 			reference	operator[] (difference_type n) const{
-				return base()[-n - 1];
+				return *(*this + n);
 			}
 
 			//Advances or decrements the iterator
@@ -109,6 +120,9 @@ namespace ft
 			reverse_iterator	operator-( difference_type n ) const{
 				return reverse_iterator(_ptr + n);
 			}
+
+			difference_type operator+(const reverse_iterator & x)  { return (this->base() + x.base()); }
+			difference_type operator-(const reverse_iterator & x)  { return (x.base() - this->base()); }
 
 			reverse_iterator	&operator+=( difference_type n ){
 				_ptr -= n;
@@ -162,9 +176,7 @@ namespace ft
 	}
 
 	template <class Iterator>
-	typename reverse_iterator<Iterator>::difference_type operator-(
-    const reverse_iterator<Iterator>& lhs,
-    const reverse_iterator<Iterator>& rhs){
+	typename reverse_iterator<Iterator>::difference_type operator-(const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator>& rhs){
 		return (rhs.base() - lhs.base());
 	}
 

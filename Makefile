@@ -24,7 +24,8 @@ CFILES =	Algorithm/equal.hpp Algorithm/lexicographical_compare.hpp \
 			Iterator/iterator_traits.hpp Iterator/reverse_iterator.hpp Iterator/random_access_iterator.hpp\
 			Type_traits/enable_if.hpp Type_traits/is_integral.hpp \
 			vector.hpp \
-			Utility/proto.hpp
+			Utility/proto.hpp \
+			stack.hpp
 
 CLASS = $(addprefix $(CLASS_PATH)/, $(CFILES))
 
@@ -32,7 +33,7 @@ CLASS = $(addprefix $(CLASS_PATH)/, $(CFILES))
 SRCS_PATH = src
 
 FILES = main.cpp \
-		vector_main.cpp
+		vector_main.cpp stack_main.cpp
 
 SRCS = $(addprefix $(SRCS_PATH)/, $(FILES))
 
@@ -43,7 +44,7 @@ STD_NAME = std_tester
 CXX = clang++
 #CXX = clang++ -O1 -g -fsanitize=address
 
-CFLAGS = -Wall -Wextra -Werror -std=c++98 -Wshadow -Wno-shadow
+CFLAGS = -Wall -Wextra -Werror -std=c++98
 
 RM = rm -rf
 

@@ -6,7 +6,7 @@
 /*   By: jgourlin <jgourlin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/20 14:30:44 by jgourlin          #+#    #+#             */
-/*   Updated: 2022/08/20 19:07:32 by jgourlin         ###   ########.fr       */
+/*   Updated: 2022/08/21 18:59:53 by jgourlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,11 @@
 
 // FT
 # include "../vector.hpp"
+# include "../stack.hpp"
 
 // STL
 # include <vector>
+# include <stack>
 
 
 // OTHER
@@ -42,6 +44,9 @@
 
 // vector_main.cpp
 
-	bool	vector_main();
+	void	vector_main();
+	void	title(std::string str, std::string color, size_t n);
+// stack_main.cpp
+	void	stack_main();
 
 # endif

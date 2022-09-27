@@ -6,7 +6,7 @@
 /*   By: jgourlin <jgourlin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/20 14:30:44 by jgourlin          #+#    #+#             */
-/*   Updated: 2022/08/21 18:59:53 by jgourlin         ###   ########.fr       */
+/*   Updated: 2022/08/23 21:23:55 by jgourlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 // STL
 # include <vector>
 # include <stack>
+# include <map>
 
 
 // OTHER
@@ -48,5 +49,8 @@
 	void	title(std::string str, std::string color, size_t n);
 // stack_main.cpp
 	void	stack_main();
+
+// map_main.cpp
+	void	map_main();
 
 # endif

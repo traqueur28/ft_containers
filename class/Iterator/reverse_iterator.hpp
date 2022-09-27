@@ -6,7 +6,7 @@
 /*   By: jgourlin <jgourlin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 10:54:02 by jgourlin          #+#    #+#             */
-/*   Updated: 2022/08/21 23:41:58 by jgourlin         ###   ########.fr       */
+/*   Updated: 2022/08/23 00:02:49 by jgourlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,11 @@ namespace ft
 	{
 		public:
 			typedef				It	iterator_type;
-			typedef typename	ft::iterator_traits<It>::iterator_category iterator_category;
+			typedef typename	ft::iterator_traits<It>::iterator_category	iterator_category;
 			typedef typename	ft::iterator_traits<It>::value_type 		value_type;
 			typedef typename	ft::iterator_traits<It>::difference_type 	difference_type;
 			typedef typename	ft::iterator_traits<It>::pointer 			pointer;
-			typedef typename	ft::iterator_traits<It>::reference 		reference;
-			// typedef typename	std::random_access_iterator_tag					iterator_category;
-			// typedef typename	iterator_traits<It>::difference_type			difference_type;
-			// typedef typename	iterator_traits<It>::value_type				value_type; //T
-			// typedef typename	iterator_traits<It>::pointer					pointer;    //T* ou const T* ...
-			// typedef typename	iterator_traits<It>::reference				reference;
+			typedef typename	ft::iterator_traits<It>::reference 			reference;
 			
 			//Default Constructor
 			reverse_iterator(void) : _ptr(iterator_type()){}

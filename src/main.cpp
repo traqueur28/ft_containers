@@ -6,7 +6,7 @@
 /*   By: jgourlin <jgourlin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/17 11:43:47 by jgourlin          #+#    #+#             */
-/*   Updated: 2022/08/21 19:33:09 by jgourlin         ###   ########.fr       */
+/*   Updated: 2022/08/23 20:24:13 by jgourlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ int main ()
 		vector_main();
 		
 		stack_main();
+
+		map_main();
 
 
 	return (0);

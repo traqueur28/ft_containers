@@ -6,7 +6,7 @@
 /*   By: jgourlin <jgourlin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/17 11:43:47 by jgourlin          #+#    #+#             */
-/*   Updated: 2022/08/23 20:24:13 by jgourlin         ###   ########.fr       */
+/*   Updated: 2022/09/29 11:10:56 by jgourlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ int main ()
 {
 		std::cout << RED__ << CHECK <<  DEFAU << std::endl;
 
-		vector_main();
+		//vector_main();
 		
-		stack_main();
+		//stack_main();
 
 		map_main();
 

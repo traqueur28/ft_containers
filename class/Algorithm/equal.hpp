@@ -6,7 +6,7 @@
 /*   By: jgourlin <jgourlin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 10:59:16 by jgourlin          #+#    #+#             */
-/*   Updated: 2022/08/19 16:57:47 by jgourlin         ###   ########.fr       */
+/*   Updated: 2022/09/29 07:41:54 by jgourlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ namespace ft
         for (; first1 != last1; ++first1, ++first2)
             if (!(*first1 == *first2))
                 return (false);
-            return (true);
+        return (true);
     }
 
     template <class T, class U, class V>

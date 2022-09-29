@@ -6,7 +6,7 @@
 /*   By: jgourlin <jgourlin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:22:50 by jgourlin          #+#    #+#             */
-/*   Updated: 2022/08/24 00:34:18 by jgourlin         ###   ########.fr       */
+/*   Updated: 2022/09/29 11:12:40 by jgourlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	map_main()
 {
-	title("STACK", RED__, 0);
+	title("MAP", RED__, 0);
 	{
 		std::map<int, int>	alpha;
 

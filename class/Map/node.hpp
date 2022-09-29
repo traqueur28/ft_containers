@@ -6,7 +6,7 @@
 /*   By: jgourlin <jgourlin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 21:44:57 by jgourlin          #+#    #+#             */
-/*   Updated: 2022/09/26 20:21:23 by jgourlin         ###   ########.fr       */
+/*   Updated: 2022/09/29 07:52:35 by jgourlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ namespace ft
 		node		*_l;
 		node		*_r;
 		node		*_p;
+		bool		_color; // 0 = black
 	};
 }
 

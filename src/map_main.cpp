@@ -6,7 +6,7 @@
 /*   By: jgourlin <jgourlin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:22:50 by jgourlin          #+#    #+#             */
-/*   Updated: 2022/09/29 11:12:40 by jgourlin         ###   ########.fr       */
+/*   Updated: 2022/09/29 11:31:23 by jgourlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,21 @@ void	map_main()
 {
 	title("MAP", RED__, 0);
 	{
-		std::map<int, int>	alpha;
+		PRE::map<int, int>	alpha;
+		std::cout << "test end vide "<< std::endl;
+		PRE::map<int, int>::const_iterator qwe = alpha.end();
+		alpha.insert(PRE::pair<int, int>(1, -1));
+		std::cout << "test end 1 elem "<< std::endl;
+		PRE::map<int, int>::const_iterator asd = alpha.end();
 
-		alpha.insert(std::pair<int, int>(1, -1));
+		static_cast<void>(qwe);
+		static_cast<void>(asd);
+
 		for (int i = 9; i >= 0; i--)
-				alpha.insert(std::pair<int, int>(i, -i));
+				alpha.insert(PRE::pair<int, int>(i, -i));
 
-		std::map<int, int>::iterator it1 = alpha.begin();
-		std::map<int, int>::iterator it2 = alpha.end();
+		PRE::map<int, int>::iterator it1 = alpha.begin();
+		PRE::map<int, int>::const_iterator it2 = alpha.end();
 		while (it1 != it2)
 		{
 			std::cout << it1->first << " => " << it1->second << '\n';
@@ -32,8 +39,8 @@ void	map_main()
 	}
 
 	{
-		std::map<int, int>	bravo;
-		std::map<int, int>::iterator it1 = bravo.begin();
+		PRE::map<int, int>	bravo;
+		PRE::map<int, int>::iterator it1 = bravo.begin();
 
 		std::cout << "begin() empty =" << it1->first << std::endl;
 	}

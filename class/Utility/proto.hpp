@@ -6,7 +6,7 @@
 /*   By: jgourlin <jgourlin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/20 14:30:44 by jgourlin          #+#    #+#             */
-/*   Updated: 2022/08/23 21:23:55 by jgourlin         ###   ########.fr       */
+/*   Updated: 2022/09/29 11:28:42 by jgourlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 // FT
 # include "../vector.hpp"
 # include "../stack.hpp"
+# include "../map.hpp"
 
 // STL
 # include <vector>

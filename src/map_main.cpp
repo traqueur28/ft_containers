@@ -6,7 +6,7 @@
 /*   By: jgourlin <jgourlin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:22:50 by jgourlin          #+#    #+#             */
-/*   Updated: 2022/09/29 11:31:23 by jgourlin         ###   ########.fr       */
+/*   Updated: 2022/09/30 04:27:12 by jgourlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	map_main()
 	}
 
 	{
-		PRE::map<int, int>	bravo;
+		PRE::map<int, int>	bravo; //map vide
 		PRE::map<int, int>::iterator it1 = bravo.begin();
 
 		std::cout << "begin() empty =" << it1->first << std::endl;

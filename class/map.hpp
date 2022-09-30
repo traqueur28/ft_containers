@@ -6,7 +6,7 @@
 /*   By: jgourlin <jgourlin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 11:00:10 by jgourlin          #+#    #+#             */
-/*   Updated: 2022/09/29 11:08:07 by jgourlin         ###   ########.fr       */
+/*   Updated: 2022/09/30 04:30:16 by jgourlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,14 +142,14 @@ namespace ft
 				iterator end(){
 					iterator	it = begin();
 
-					for (size_t i = 0; i <= _size; i++)
+					for (size_t i = 0; i < _size; i++)
 						it++;
 					return (it);
 				}
 				const_iterator end() const{
 					iterator	it = _Min(_root);
 
-					for (size_t i = 0; i <= _size; i++)
+					for (size_t i = 0; i < _size; i++)
 						it++;
 					const_iterator res = it;
 					return (it);
@@ -203,7 +203,6 @@ namespace ft
 				{
 					size_type	size_tmp = _size;
 					node	*tmp;
-std::cout << "ALPHA INSERT" << std::endl;
 					if (empty())
 					{
 						_root = _New_node(val, NULL, 0);
@@ -211,17 +210,13 @@ std::cout << "ALPHA INSERT" << std::endl;
 					}
 					else
 					{
-std::cout << "Bravo NISERT" << std::endl;
 						tmp = _Insert_node(_root, val);
 						if (!tmp)
 							return pair<iterator, bool>(find(val.first), size_tmp != size());
 						_size++;
-std::cout << "Charlie NISERT" << std::endl;
 						// Coloring
 						_Coloring(tmp);
-std::cout << "delta NISERT" << std::endl;
 					}
-std::cout << "echo NISERT" << std::endl;
 					return pair<iterator, bool>(find(val.first), size_tmp != size());
 
 
@@ -239,7 +234,7 @@ std::cout << "echo NISERT" << std::endl;
 				void	insert(InputIterator first, InputIterator last)
 				{
 					for (;first != last; first++)
-						insert(first);
+						insert(*first);
 				}
 			
 				// erase

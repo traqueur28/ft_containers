@@ -6,7 +6,7 @@
 /*   By: jgourlin <jgourlin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:22:50 by jgourlin          #+#    #+#             */
-/*   Updated: 2022/09/30 04:27:12 by jgourlin         ###   ########.fr       */
+/*   Updated: 2022/09/30 13:59:46 by jgourlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,23 +25,88 @@ void	map_main()
 
 		static_cast<void>(qwe);
 		static_cast<void>(asd);
-
 		for (int i = 9; i >= 0; i--)
 				alpha.insert(PRE::pair<int, int>(i, -i));
 
 		PRE::map<int, int>::iterator it1 = alpha.begin();
-		PRE::map<int, int>::const_iterator it2 = alpha.end();
+		PRE::map<int, int>::iterator it2 = alpha.end();
 		while (it1 != it2)
 		{
+			std::cout << "UwU" << std::endl;
 			std::cout << it1->first << " => " << it1->second << '\n';
 			it1++;
 		}
 	}
 
 	{
-		PRE::map<int, int>	bravo; //map vide
-		PRE::map<int, int>::iterator it1 = bravo.begin();
+std::cout << "MAP PHASE 2" << std::endl;
+		// PRE::map<int, int>	bravo; //map vide
+		// PRE::map<int, int>::iterator it1 = bravo.begin();
+		// PRE::map<int, int>::iterator it2 = bravo.end();
 
-		std::cout << "begin() empty =" << it1->first << std::endl;
+		// std::cout << "begin = " << &it1 << std::endl;
+		// std::cout << "end   = " << &it2 << std::endl;
+
+		// std::cout << "begin() empty = " << it1->first << " - " << it1->second << std::endl;
+		// bravo.insert(PRE::pair<int, int>(42, 666));
+		// bravo.insert(PRE::pair<int, int>(41, 66));
+		// bravo.insert(PRE::pair<int, int>(43, 66));
+
+		// it1 = bravo.begin();
+		// it2 = bravo.end();
+
+		// std::cout << "begin = " << &it1 << std::endl;
+		// std::cout << "end   = " << &it2 << std::endl;
+		// while (it1 != it2)
+		// {
+		// 	std::cout << "b begin = " << &it1 << " " << it1->first << std::endl;
+		// 	std::cout << "b end   = " << &it2 << " " << it2->first << std::endl;
+		// 	++it1;
+		// }
+
+
+		// std::cout << "begin() meme non vide = " << it1->first << " - " << it1->second << std::endl;
+		// PRE::map<int, int>::iterator UWU = bravo.begin();
+		// std::cout << "begin() empty = " << UWU->first << " - " << UWU->second << std::endl;
+	}
+
+	{
+		std::cout << "MAP PHASE 3" << std::endl;
+		PRE::map<int, int>	bravo;
+		for (int i = 9; i >= 0; i--)
+				bravo.insert(PRE::pair<int, int>(i, -i));
+		PRE::map<int, int>::iterator it(bravo.begin());
+		++it;
+		std::cout << "it = "<< it->first<< std::endl;
+		it++;
+		std::cout << "it = "<< it->first<< std::endl;
+		it++;
+		std::cout << "it = "<< it->first<< std::endl;
+		++it;
+		std::cout << "it = "<< it->first<< std::endl;
+		++it;
+		std::cout << "it = "<< it->first<< std::endl;
+		++it;
+		std::cout << "it = "<< it->first<< std::endl;
+		++it;
+		std::cout << "it = "<< it->first<< std::endl;
+		++it;
+		while (it != bravo.end())
+		{
+			std::cout << "it = "<< it->first<< std::endl;
+			it++;
+		}
+		
+		std::cout << "it = "<< &it<< std::endl;
+
+		
+		std::cout << "pre end"<< std::endl;
+		PRE::map<int, int>::iterator ite(bravo.end());
+		std::cout << "sub end"<< std::endl;
+		std::cout << "ite= "<< &ite<< std::endl;
+		--ite;
+		ite--;
+		std::cout << "ite = "<< &ite<< std::endl;
+
 	}
 }

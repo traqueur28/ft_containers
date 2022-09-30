@@ -21,9 +21,9 @@ endif
 CLASS_PATH = class
 
 CFILES =	Algorithm/equal.hpp Algorithm/lexicographical_compare.hpp \
-			Iterator/iterator_traits.hpp Iterator/reverse_iterator.hpp \
+			Iterator/iterator_traits.hpp Iterator/reverse_iterator.hpp Iterator/map_iterator.hpp Iterator/map_reverse_iterator.hpp \
 			Type_traits/enable_if.hpp Type_traits/is_integral.hpp \
-			vector.hpp stack.hpp \
+			vector.hpp stack.hpp map.hpp\
 			Utility/proto.hpp Utility/pair.hpp \
 			Map/node.hpp
 

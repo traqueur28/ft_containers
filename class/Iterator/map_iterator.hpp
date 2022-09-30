@@ -6,7 +6,7 @@
 /*   By: jgourlin <jgourlin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/22 23:27:30 by jgourlin          #+#    #+#             */
-/*   Updated: 2022/09/29 11:29:12 by jgourlin         ###   ########.fr       */
+/*   Updated: 2022/09/30 14:56:28 by jgourlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,18 @@ namespace ft
 
 		private:
 			node 	*_current;
+			node	*_end;
 			Compare	_comp;
 
 		public:
 			map_iterator(): _current(NULL){}
-			map_iterator(node *ptr): _current(ptr), _comp(Compare()) {}
-			map_iterator( const map_iterator& other ) { _current = other._current; _comp = other._comp;};
+			map_iterator(node *ptr, node *end): _current(ptr), _end(end),_comp(Compare()) {}
+			map_iterator( const map_iterator& other )
+			{
+				_current = other._current;
+				_end = other._end;
+				_comp = other._comp;
+			};
 
 			virtual ~map_iterator(){};
 
@@ -65,7 +71,7 @@ namespace ft
 			}
 
 			operator map_iterator<Compare, node, T const>() const{
-				return (map_iterator<Compare, node, T const>(_current));
+				return (map_iterator<Compare, node, T const>(_current, NULL));
 			}
 
 			reference operator*() const{
@@ -77,47 +83,41 @@ namespace ft
 
 			map_iterator &operator++()
 			{
+//  std::cout << &_current << std::endl;
+				if (_current == _end)
+					return *this;
+
 				if (_current->_r)
 				{
 					_current = _current->_r;
-					while (_current->_l != NULL)
+					while (_current->_l)
 						_current = _current->_l;
 				}
-				else if (_current->_r == NULL)
+				else
 				{
-					node *temp = _current;
+					while (_current->_p && _comp(_current->_p->_v->first, _current->_v->first))// ttant que fils> pere
+						_current = _current->_p;
+					if (_current->_p && _comp(_current->_v->first, _current->_p->_v->first)) //fils < pere
+						_current = _current->_p;
+					else // plus de pere alors current etait le plus grand
+						_current = _end;//_end
 
-					if (_current->_p)
-					{
-						if (_comp(_current->_v->first, _current->_p->_v->first))
-								_current = _current->_p;
-						else
-						{
-							while (_current->_p && (!(_comp(_current->_v->first, _current->_p->_v->first))))
-								_current = _current->_p;
-							if (_current->_p && _comp(_current->_v->first, _current->_p->_v->first))
-								_current = _current->_p;
-
-							if (_comp(_current->_v->first, temp->_v->first))
-								_current = NULL;
-						}
-					}
-					else
-						_current = NULL;
+	
 				}
+				// std::cout << &_current << std::endl;
 				return *this;
 			}
 
 			map_iterator operator++(int)
 			{
-				node *temp = _current;
+				map_iterator	tmp(*this);
 				++(*this);
-				return (map_iterator(temp));
+				return (tmp);
 			}
 
 			map_iterator &operator--()
 			{
-				if (_current->_l)
+				if (_current->_l != NULL)
 				{
 					_current = _current->_l;
 					while (_current->_r)
@@ -137,7 +137,7 @@ namespace ft
 			{
 				node *temp = _current;
 				--(*this);
-				return (map_iterator(temp));
+				return (map_iterator(temp, NULL));
 			}
 
 			friend bool operator==(const map_iterator& lhs, const map_iterator& rhs){
@@ -147,31 +147,6 @@ namespace ft
 			friend bool operator!=(const map_iterator& lhs, const map_iterator& rhs){
 				return (lhs._current != rhs._current);
 				}
-
-			// node *find_end(node *N)
-			// {
-			// 	node *temp = N;
-
-			// 	while (temp->_p)
-			// 		temp = temp->_p;
-			// 	while (temp->_r)
-			// 		temp = temp->_r;
-			// 	return temp->_end;
-			// }
-
-			// node *find_last(node *N)
-			// {
-			// 	node *temp = N;
-			// 	while (temp->_p)
-			// 		temp = temp->_p;
-			// 	while (temp->_r)
-			// 		temp = temp->_r;
-			// 	return temp;
-			// }
-
-			node	*getnode(){
-				return _current;
-			}
 	};
 }
 

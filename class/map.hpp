@@ -6,7 +6,7 @@
 /*   By: jgourlin <jgourlin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 11:00:10 by jgourlin          #+#    #+#             */
-/*   Updated: 2022/10/01 12:16:38 by jgourlin         ###   ########.fr       */
+/*   Updated: 2022/10/01 14:15:27 by jgourlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,16 @@ namespace ft
 					clear();
 				}
 				// operator=
+				map &operator= (const map &x)
+				{
+					_comp = x._comp;
+					_alloc = x._alloc;
+					_alloc_node = x._alloc_node;
+					_alloc_pair = x._alloc_pair;
+					clear();
+					insert(x.begin(), x.end());
+					return (*this);
+				}
 				// get_allocator
 				allocator_type get_allocator() const{
 					return (_alloc);
@@ -138,12 +148,12 @@ namespace ft
 				// begin
 				iterator begin(){
 					if (!_size)
-						return (iterator(_root, _end));
+						return (iterator(_end, _end));
 					return (iterator(_Min(_root), _end));
 				}
 				const_iterator begin() const{
 					if (!_size)
-						return (const_iterator(_root, _end));
+						return (const_iterator(_end, _end));
 					return (const_iterator(_Min(_root), _end));
 				}
 
@@ -194,6 +204,8 @@ namespace ft
 					{
 						_Clear_tree(_root);
 						_size = 0;
+						_end->_p = NULL;
+						_root = NULL;
 					}	
 				}
 				// insert
@@ -325,7 +337,7 @@ namespace ft
 					tmp = _Min(_root);
 					while (tmp)
 					{
-						if (!_comp(k, tmp->_v->first))
+						if (!_comp(tmp->_v->first, k))
 							return (iterator(tmp, _end));
 						tmp = _Next(tmp);
 					}
@@ -339,7 +351,7 @@ namespace ft
 					tmp = _Min(_root);
 					while (tmp)
 					{
-						if (!_comp(k, tmp->_v->first))
+						if (!_comp(tmp->_v->first, k))
 							return (const_iterator(tmp, _end));
 						tmp = _Next(tmp);
 						
@@ -357,8 +369,10 @@ namespace ft
 					tmp = _Min(_root);
 					while (tmp)
 					{
-						if (!_comp(k, tmp->_v->first) && tmp->_v->first != k)
-							return (iterator(tmp, _end));
+						if (_comp(k, tmp->_v->first))
+						{
+								return (iterator(tmp, _end));
+						}
 						tmp = _Next(tmp);
 					}
 					return (end());
@@ -371,7 +385,7 @@ namespace ft
 					tmp = _Min(_root);
 					while (tmp)
 					{
-						if (!_comp(k, tmp->_v->first) && tmp->_v->first != k)
+						if (_comp(k, tmp->_v->first)) 
 							return (const_iterator(tmp, _end));
 						tmp = _Next(tmp);
 					}
@@ -680,10 +694,9 @@ namespace ft
 						_Clear_tree(N->_r);
 					_Free_node(N);
 				}
-				_root = NULL;
+				//_root = NULL;
 			}
 
-			// bool	_Equal(const Key &k1, const Key &k2) const{
 			// 	return (!_comp(k1, k2) && !_comp(k2, k1));
 			// }
 
@@ -714,7 +727,7 @@ namespace ft
 				while (tmp->_p)
 				{
 					tmp = tmp->_p;
-					if (tmp->_v >= p->_v)
+					if (_comp(p->_v->first, tmp->_v->first)) //tmp->_v >= p->_v
 						return (tmp);
 				}
 				return (NULL);
@@ -730,7 +743,7 @@ namespace ft
 				while (tmp->_p)
 				{
 					tmp = tmp->_p;
-					if (tmp->_v <= p->_v)
+					if (_comp(tmp->_v->first, p->v->first)) //tmp->_v <= p->_v
 						return (tmp);
 				}
 				return (NULL);

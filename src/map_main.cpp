@@ -6,7 +6,7 @@
 /*   By: jgourlin <jgourlin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:22:50 by jgourlin          #+#    #+#             */
-/*   Updated: 2022/10/01 12:53:28 by jgourlin         ###   ########.fr       */
+/*   Updated: 2022/10/01 14:05:10 by jgourlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ std::cout << "MAP PHASE 2" << std::endl;
 
 
 	}
-	std::cout << std::endl << "MAP PHASE 4" << std::endl;
+	std::cout << std::endl << "MAP PHASE 5" << std::endl;
 	{
 		PRE::map<char, int>	a;
 
@@ -150,11 +150,9 @@ std::cout << "MAP PHASE 2" << std::endl;
 		a['c'] = 0;
 		a['d'] = 4;
 
-std::cout << "SAlut" << std::endl;
 		PRE::map<char, int>::const_iterator it = a.begin();
 		PRE::map<char, int>::const_iterator it2;
 
-std::cout  << "aurevoir" << std::endl;
 		while (it != a.end())
 		{
 			std::cout << "--" << std::endl;
@@ -170,4 +168,54 @@ std::cout  << "aurevoir" << std::endl;
 		}
 
 	}
+	std::cout << std::endl << "MAP PHASE 5" << std::endl;
+	{
+		PRE::map<int, int> mp;
+
+		PRE::map<int, int>::iterator it = mp.begin();
+		PRE::map<int, int>::iterator ite = mp.end();
+		while (it != ite)
+		{
+			std::cout << it->first << std::endl;
+			it++;
+		}
+		mp[42] = 28;
+		it = mp.begin();
+		while (it != ite)
+		{
+			std::cout << it->first << std::endl;
+			it++;
+		}
+		mp.clear();
+		it = mp.begin();
+		while (it != ite)
+		{
+			std::cout << it->first << std::endl;
+			it++;
+		}
+	}
+	std::cout << std::endl << "MAP PHASE 6" << std::endl;
+	{
+		PRE::map<int, int> mp;
+
+		for (int i = 0; i < 9; i++)
+		{
+			mp.insert(PRE::pair<int, int>(i * 3, i*2));
+			std::cout << i * 3 << " " << mp[i * 3] << std::endl;
+		}
+
+		std::cout << "LOWER" << std::endl;	
+		std::cout << "lower_bound(6) = " << mp.lower_bound(6)->first << std::endl;
+		std::cout << "UPPER" << std::endl;
+		std::cout << "upper_bound(6) = " << mp.upper_bound(6)->first << std::endl;
+
+		std::cout << "LOWER" << std::endl;	
+		std::cout << "lower_bound(5) = " << mp.lower_bound(5)->first << std::endl;
+		std::cout << "UPPER" << std::endl;
+		std::cout << "upper_bound(5) = " << mp.upper_bound(5)->first << std::endl;
+		std::cout << "end" << std::endl;
+
+
+	}
+
 }

@@ -6,7 +6,7 @@
 /*   By: jgourlin <jgourlin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 11:00:10 by jgourlin          #+#    #+#             */
-/*   Updated: 2022/10/01 07:05:30 by jgourlin         ###   ########.fr       */
+/*   Updated: 2022/10/01 12:16:38 by jgourlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,19 +143,15 @@ namespace ft
 				}
 				const_iterator begin() const{
 					if (!_size)
-						return (const_iterator(NULL, _end));
+						return (const_iterator(_root, _end));
 					return (const_iterator(_Min(_root), _end));
 				}
 
 				// end
 				iterator end(){
-					if (!_size)
-					 	return (iterator(_end, _end));
 					return (iterator(_end, _end));
 				}
 				const_iterator end() const{
-					if (!_size)
-					 	return (const_iterator(_end, _end));
 					return (const_iterator(_end, _end));
 				}
 
@@ -220,12 +216,16 @@ namespace ft
 						_Coloring(tmp);
 					}
 					if (_end->_p == NULL)
+					{
 						_end->_p = _root;
+					}
 					else
 					{
 						node *node_max = _Max(_root);
 						if (_comp(_end->_p->_v->first, node_max->_v->first))
+						{
 							_end->_p = node_max;
+						}
 					}
 					return pair<iterator, bool>(find(val.first), size_tmp != size());
 				}
@@ -427,8 +427,10 @@ namespace ft
 				_end->_l = NULL;
 				_end->_r = NULL;
 				_end->_p = NULL;
-				_end->_color = 0;
+				_end->_color = 2;
 				_end->_v = NULL;
+				_end->_v = _alloc_pair.allocate(1);
+				_alloc_pair.construct(_end->_v, value_type(key_type(), mapped_type()));
 
 			}
 

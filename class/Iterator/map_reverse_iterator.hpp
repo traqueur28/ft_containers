@@ -6,7 +6,7 @@
 /*   By: jgourlin <jgourlin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/26 19:34:56 by jgourlin          #+#    #+#             */
-/*   Updated: 2022/10/01 07:06:22 by jgourlin         ###   ########.fr       */
+/*   Updated: 2022/10/01 12:18:09 by jgourlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,24 +30,21 @@ namespace ft
 
 			// Constructor
 			map_reverse_iterator(): _it() {}
-			explicit map_reverse_iterator( iterator_type x ) { _it = x;}
+			explicit map_reverse_iterator( iterator_type x ) {_it = x;}
 			map_reverse_iterator( map_reverse_iterator const & other ) { _it = other._it;};
 			template <class U>
 			map_reverse_iterator( const map_reverse_iterator<U>& other ) { _it = other.base();};
 
-			map_reverse_iterator & operator=(map_reverse_iterator const  &rhs) { _it = rhs._it; return (*this);}
-			map_reverse_iterator & operator+=( difference_type n ) { _it -=n; return (*this);}
-			map_reverse_iterator & operator-=( difference_type n ) { _it +=n; return (*this);}
+			map_reverse_iterator &operator=(map_reverse_iterator const  &rhs) { _it = rhs._it; return (*this);}
+			map_reverse_iterator &operator+=( difference_type n ) { _it -=n; return (*this);}
+			map_reverse_iterator &operator-=( difference_type n ) { _it +=n; return (*this);}
 
 			// Accessor
 
 			reference operator*()
 			{
-				// std::cout << "revertse_operator*" << std::endl;
 				Iter temp = _it;
-				// std::cout << "revertse_operator* b" << std::endl;
 				--temp;
-				// std::cout << "revertse_operator* c" << std::endl;
 				return *temp;
 			}
 
@@ -65,9 +62,18 @@ namespace ft
 
 			// Operator
 
-			map_reverse_iterator &operator++() { _it--; return *this;}
+			map_reverse_iterator &operator++()
+			{
+				_it--;
+				return *this;
+			}
 			map_reverse_iterator &operator--() { _it++; return *this;}
-			map_reverse_iterator operator++(int) { map_reverse_iterator temp = *this; _it--; return (temp);}
+			map_reverse_iterator operator++(int)
+			{
+				map_reverse_iterator temp = *this;
+				_it--;
+				return (temp);
+			}
 			map_reverse_iterator operator--(int) { map_reverse_iterator temp = *this; _it++; return (temp);}
 
 			map_reverse_iterator operator+( difference_type n ) const

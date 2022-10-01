@@ -6,7 +6,7 @@
 /*   By: jgourlin <jgourlin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/22 23:27:30 by jgourlin          #+#    #+#             */
-/*   Updated: 2022/10/01 07:09:03 by jgourlin         ###   ########.fr       */
+/*   Updated: 2022/10/01 12:58:36 by jgourlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ namespace ft
 			Compare	_comp;
 
 		public:
-			map_iterator(): _current(NULL){}
+			map_iterator(): _current(NULL), _end(NULL){}
 			map_iterator(node *ptr, node *end): _current(ptr), _end(end),_comp(Compare()) {}
 			map_iterator( const map_iterator& other )
 			{
@@ -52,7 +52,10 @@ namespace ft
 			map_iterator &operator=(map_iterator const &rhs)
 			{
 				if (this != &rhs)
+				{
 					this->_current = rhs._current;
+					this->_end = rhs._end;
+				}
 				return (*(this));
 			}
 
@@ -71,7 +74,7 @@ namespace ft
 			}
 
 			operator map_iterator<Compare, node, T const>() const{
-				return (map_iterator<Compare, node, T const>(_current, NULL));
+				return (map_iterator<Compare, node, T const>(_current, _end));
 			}
 
 			reference operator*() const{
@@ -83,9 +86,6 @@ namespace ft
 
 			map_iterator &operator++()
 			{
-				if (_current == _end)
-					return *this;
-
 				if (_current->_r)
 				{
 					_current = _current->_r;
@@ -115,9 +115,16 @@ namespace ft
 				return (tmp);
 			}
 
+			
+
 			map_iterator &operator--()
 			{
-				if (_current->_l != NULL)
+				if (_current->_color == 2)
+				{
+					if (_current->_p)
+						_current = _current->_p;
+				}
+				else if (_current->_l)
 				{
 					_current = _current->_l;
 					while (_current->_r)
@@ -125,14 +132,13 @@ namespace ft
 				}
 				else
 				{
-					if (!_current->_v)
-						_current = _current->_p;
-					else
+					while (_current->_p && (_comp(_current->_v->first, _current->_p->_v->first)))
 					{
-						while (_current->_p && (_comp(_current->_v->first, _current->_p->_v->first)))
-							_current = _current->_p;
-						if (_current->_p && (!_comp(_current->_v->first, _current->_p->_v->first)))
-							_current = _current->_p;
+						_current = _current->_p;
+					}
+					if (_current->_p && (!_comp(_current->_v->first, _current->_p->_v->first)))
+					{
+						_current = _current->_p;
 					}
 				}
 				return *this;
@@ -142,7 +148,7 @@ namespace ft
 			{
 				node *temp = _current;
 				--(*this);
-				return (map_iterator(temp, NULL));
+				return (map_iterator(temp, _end));
 			}
 
 			friend bool operator==(const map_iterator& lhs, const map_iterator& rhs){

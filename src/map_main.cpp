@@ -6,7 +6,7 @@
 /*   By: jgourlin <jgourlin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:22:50 by jgourlin          #+#    #+#             */
-/*   Updated: 2022/09/30 13:59:46 by jgourlin         ###   ########.fr       */
+/*   Updated: 2022/10/01 04:10:21 by jgourlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,8 +103,9 @@ std::cout << "MAP PHASE 2" << std::endl;
 		std::cout << "pre end"<< std::endl;
 		PRE::map<int, int>::iterator ite(bravo.end());
 		std::cout << "sub end"<< std::endl;
-		std::cout << "ite= "<< &ite<< std::endl;
+		std::cout << "pre --ite= "<< &ite<< std::endl;
 		--ite;
+		std::cout << "pre ite--= "<< &ite<< std::endl;
 		ite--;
 		std::cout << "ite = "<< &ite<< std::endl;
 

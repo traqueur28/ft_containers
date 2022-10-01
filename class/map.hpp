@@ -6,7 +6,7 @@
 /*   By: jgourlin <jgourlin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 11:00:10 by jgourlin          #+#    #+#             */
-/*   Updated: 2022/09/30 15:02:19 by jgourlin         ###   ########.fr       */
+/*   Updated: 2022/10/01 07:05:30 by jgourlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,12 +150,12 @@ namespace ft
 				// end
 				iterator end(){
 					if (!_size)
-					 	return (iterator(NULL, _end));
+					 	return (iterator(_end, _end));
 					return (iterator(_end, _end));
 				}
 				const_iterator end() const{
 					if (!_size)
-					 	return (const_iterator(NULL, _end));
+					 	return (const_iterator(_end, _end));
 					return (const_iterator(_end, _end));
 				}
 
@@ -273,28 +273,19 @@ namespace ft
 				iterator find(const key_type &k)
 				{
 					node	*tmp = _root;
-
-					 if (empty())
+					if (empty())
 					 	return (end());
 					while (1)
 					{
 						if (tmp->_v->first == k)
 							return (iterator(tmp, _end));
-						else if (k > tmp->_v->first && tmp->_r)
+						else if (_comp(tmp->_v->first, k) && tmp->_r)
 							tmp = tmp->_r;
-						else if (k < tmp->_v->first && tmp->_l)
+						else if (_comp(k, tmp->_v->first) && tmp->_l)
 							tmp = tmp->_l;
 						else
-							return (iterator(_end, _end));
+							return (end());
 					}
-					// while (tmp)
-					// {
-					// 	res = tmp;
-					// 	if (tmp->_v->first == k)
-					// 		return (iterator(tmp, _end));
-					// 	tmp = _Next(tmp);
-					// }
-					// return (end());
 				}
 				
 				const_iterator find(const key_type &k) const
@@ -302,15 +293,15 @@ namespace ft
 					node	*tmp;
 					
 					if (empty())
-					return (end());
+						return (end());
 					tmp = _root;
 					while (1)
 					{
 						if (tmp->_v->first == k)
 							return (const_iterator(tmp, _end));
-						else if (k > tmp->_v->first && tmp->_r)
+						else if (_comp(tmp->_v->first, k) && tmp->_r)
 							tmp = tmp->_r;
-						else if (k < tmp->_v->first && tmp->_l)
+						else if (_comp(k, tmp->_v->first) && tmp->_l)
 							tmp = tmp->_l;
 						else
 							return (end());
@@ -431,7 +422,14 @@ namespace ft
 			}
 
 			void	_Init_null(){
-				_end = _New_node(value_type(key_type(), mapped_type()), NULL, 0);
+				// _end = _New_node(value_type(key_type(), mapped_type()), NULL, 0);
+				_end = _alloc_node.allocate(1);
+				_end->_l = NULL;
+				_end->_r = NULL;
+				_end->_p = NULL;
+				_end->_color = 0;
+				_end->_v = NULL;
+
 			}
 
 			void	_Free_node(node *N)
@@ -498,7 +496,6 @@ namespace ft
 						current->_p->_p = parent;
 					}
 				}
-				//return (_Right_rotate(current));
 			}	
 
 			void	_Right_right_case(node *current) // Left rotate grandParent
@@ -526,7 +523,6 @@ namespace ft
 						current->_p->_p = parent;
 					}
 				}
-				//return (Left_rotate(current));
 			}
 
 			void	_Left_right_case(node *current) // left par - right gp
@@ -556,7 +552,6 @@ namespace ft
 						current->_p->_p = parent;
 					}
 				}
-				//return (_Right_rotate(current));
 			}
 
 			void	_Right_left_case(node *current) // right par - left gp
@@ -586,7 +581,6 @@ namespace ft
 						current->_p->_p = parent;
 					}
 				}
-				//return (_Left_rotate(current));
 			}	
 			// --------------
 
@@ -595,16 +589,20 @@ namespace ft
 				if (val.first == current->_v->first)
 					return (NULL);
 
-				if (val.first > current->_v->first && current->_r)
+				if (_comp(current->_v->first, val.first) && current->_r)
+				{
 					return (_Insert_node(current->_r, val));
-				else if (val.first > current->_v->first && !current->_r)
+				}
+				else if (_comp(current->_v->first, val.first) && !current->_r)
 				{
 					current->_r = _New_node(val, current, 1);
 					return (current->_r); //right
 				}
-				else if (val.first < current->_v->first && current->_l)
+				else if (_comp(val.first, current->_v->first) && current->_l)
+				{
 					return (_Insert_node(current->_l, val));
-				else if (val.first < current->_v->first && !current->_l)
+				}
+				else if (_comp(val.first, current->_v->first) && !current->_l)
 				{
 					current->_l = _New_node(val, current, 1);
 					return (current->_l); //left

@@ -6,7 +6,7 @@
 /*   By: jgourlin <jgourlin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/22 23:27:30 by jgourlin          #+#    #+#             */
-/*   Updated: 2022/09/30 14:56:28 by jgourlin         ###   ########.fr       */
+/*   Updated: 2022/10/01 07:09:03 by jgourlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,6 @@ namespace ft
 
 			map_iterator &operator++()
 			{
-//  std::cout << &_current << std::endl;
 				if (_current == _end)
 					return *this;
 
@@ -93,7 +92,7 @@ namespace ft
 					while (_current->_l)
 						_current = _current->_l;
 				}
-				else
+				else if (_current->_v)
 				{
 					while (_current->_p && _comp(_current->_p->_v->first, _current->_v->first))// ttant que fils> pere
 						_current = _current->_p;
@@ -104,7 +103,8 @@ namespace ft
 
 	
 				}
-				// std::cout << &_current << std::endl;
+				else
+					_current = _end;
 				return *this;
 			}
 
@@ -125,10 +125,15 @@ namespace ft
 				}
 				else
 				{
-					while (_current->_p && (_comp(_current->_v->first, _current->_p->_v->first)))
+					if (!_current->_v)
 						_current = _current->_p;
-					if (_current->_p && (!_comp(_current->_v->first, _current->_p->_v->first)))
-						_current = _current->_p;
+					else
+					{
+						while (_current->_p && (_comp(_current->_v->first, _current->_p->_v->first)))
+							_current = _current->_p;
+						if (_current->_p && (!_comp(_current->_v->first, _current->_p->_v->first)))
+							_current = _current->_p;
+					}
 				}
 				return *this;
 			}

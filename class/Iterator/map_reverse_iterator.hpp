@@ -6,7 +6,7 @@
 /*   By: jgourlin <jgourlin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/26 19:34:56 by jgourlin          #+#    #+#             */
-/*   Updated: 2022/09/30 09:26:59 by jgourlin         ###   ########.fr       */
+/*   Updated: 2022/10/01 07:06:22 by jgourlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,11 @@ namespace ft
 
 			reference operator*()
 			{
+				// std::cout << "revertse_operator*" << std::endl;
 				Iter temp = _it;
+				// std::cout << "revertse_operator* b" << std::endl;
 				--temp;
+				// std::cout << "revertse_operator* c" << std::endl;
 				return *temp;
 			}
 

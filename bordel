@@ -1,0 +1,317 @@
+void	_Erase_coloring(node *current)
+			{
+				std::cout << "-Erase coloring" << std::endl;
+				node	*sibling;
+				node	*parent;
+
+				if (current == _root) // if root then black
+				{
+					std::cout << "root" << std::endl;
+					current->_color = 0;
+					return ;
+				}
+
+std::cout << "--Erase coloring 1" << std::endl;
+				sibling = _Sibling(current);
+				parent = current->_p;
+				std::cout << "--Erase coloring 2" << std::endl;
+				if (!sibling)
+				{
+					std::cout << "--Erase coloring No Sibling" << std::endl;
+					_Erase_coloring(parent);
+				}
+				// C Sibling RED
+				else if (sibling->_color)
+				{
+					std::cout << "--Erase coloring Sibling RED" << std::endl;
+					parent->_color = 1;
+       				sibling->_color = 0;
+					if (sibling == parent->_l) // sibling == left
+						_Right_rotate_erase(parent);
+					else
+						_Left_rotate_erase(parent);
+					_Erase_coloring(current);
+				}
+				else // sibling BLACK
+				{
+					std::cout << "--Erase coloring Sibling BLACK" << std::endl;
+					// A 1+ child RED
+					if ((sibling->_r && sibling->_r->_color) || (sibling->_l && sibling->_l->_color))
+					{
+						std::cout << "--Erase coloring RED CHILD" << std::endl;
+						if (sibling->_l && sibling->_l->_color) // _l RED
+						{
+							if (sibling == parent->_l) // sibling == left
+							{
+								sibling->_l->_color = sibling->_color;
+								sibling->_color = parent->_color;
+								_Right_rotate_erase(parent);
+							}
+							else
+							{
+								sibling->_l->_color = parent->_color;
+              					_Right_rotate(sibling);
+              					_Left_rotate_erase(parent);
+							}
+						}
+						else
+						{
+							if (sibling == parent->_l) // sibling == left
+							{
+								sibling->_r->_color = parent->_color;
+              					_Left_rotate_erase(sibling);
+              					_Right_rotate_erase(parent);
+							}
+							else
+							{
+								std::cout << "HFGHJYGFGHJIJHGFGHJKJH" << std::endl;
+								sibling->_r->_color = sibling->_color;
+              					sibling->_color = parent->_color;
+              					_Left_rotate_erase(parent);
+							}
+						}
+					}
+					// B 2  child BLACK
+					else
+					{
+						std::cout << "--Erase coloring BLACK CHILD" << std::endl;
+						sibling->_color = 1;
+						if (!parent->_color) // if Parent BLACK
+							_Erase_coloring(parent);
+						else
+							parent->_color = 0;
+					}
+				}
+				// current == _root, current->color = 0			
+
+			}
+
+            node	*_Sibling(node *current)
+			{
+				if (current->_p->_r == current)
+					return (current->_p->_l);
+				return (current->_p->_r);
+			}
+
+            node* _Delete_node(node *current, const key_type &k)
+			{
+				node	*tmp;
+
+				tmp = NULL;
+
+
+				std::cout << "Delete_node Begin k = " << k << " current = " << current->_v->first << std::endl;
+				if (_comp(k, current->_v->first))
+				{
+					std::cout << "Delete_node 1 _l" << std::endl;
+					current->_l = _Delete_node(current->_l, k);
+				}
+				else if (_comp(current->_v->first, k))
+				{
+					std::cout << "Delete_node 2 _r" << std::endl;
+					current->_r = _Delete_node(current->_r, k);
+				}
+				else // k trouver
+				{
+					std::cout << "Delete_node 3 _found" << std::endl;
+					if (!current->_l && !current->_r) // No child
+					{
+						std::cout << "Delete_node 3a no child" << std::endl;
+						_size--;
+						if (!current->_color) // if black 2 consecutive black
+							_Erase_coloring(current);
+						// Two consecutive Black
+						_Free_node(current);
+						return (tmp);
+					}
+					else if (!current->_l) // One child _r
+					{
+						std::cout << "Delete_node 3b child _r" << std::endl;
+						tmp = current->_r;
+						if (tmp->_color || current->_color) // if one Red: tmp become Black
+							tmp->_color = 0;
+						// else // Two consecutive Black
+						// 	_Erase_coloring(current);
+
+						_size--;
+						_Free_node(current);
+						return (tmp);
+					
+					}
+					else if (!current->_r) // One child _l
+					{
+						std::cout << "Delete_node 3c child _l" << std::endl;
+						tmp = current->_l;
+						if (tmp->_color || current->_color) // if one Red: tmp become Black
+							tmp->_color = 0;
+						// else // Two consecutive Black
+						// 	_Erase_coloring(current);
+
+						_size--;
+						_Free_node(current);
+						return (tmp);
+					}
+					else // 2 Child get _Next swap value and continue
+					{
+						std::cout << "Delete_node 3d 2 child" << std::endl;
+						tmp = _Next(current);
+						_Swap_node_value(current, tmp);
+						std::cout << "sub current = " << current->_v->first << " " << current->_v->second << std::endl;
+						current->_r = _Delete_node(current->_r, k);
+
+					}
+				}
+				std::cout << "Delete_node end" << std::endl;
+				return (current);
+			}
+
+            void	_Swap_node_value(node *n1, node *n2)
+			{
+				//value_type	k;
+				node	k;
+
+				std::cout << "Swap node" << std::endl;
+				std::cout << "current = " << n1->_v->first << " " << n1->_v->second << std::endl;
+				std::cout << "_Next = " << n2->_v->first << " " << n2->_v->second << std::endl;
+
+
+				k._v = n1->_v;
+				n1->_v = n2->_v;
+				n2->_v = k._v;
+
+				std::cout << "Swap node end" << std::endl;
+				std::cout << "current = " << n1->_v->first << " " << n1->_v->second << std::endl;
+				std::cout << "_Next = " << n2->_v->first << " " << n2->_v->second << std::endl;
+
+			}
+
+
+            			void	_Right_rotate_erase(node *current)
+			{
+				if (current == _root)
+					_root = _Right_rotate(current);
+				else
+				{
+					node	*parent = current->_p;
+					if (parent->_r == current)
+					{
+						parent->_r = _Right_rotate(current);
+						current->_p->_p = parent;
+					}
+					else
+					{
+						parent->_l = _Right_rotate(current);
+						current->_p->_p = parent;
+					}
+				}
+
+
+			}
+
+			void	_Left_rotate_erase(node *current)
+			{
+				if (current == _root)
+				{
+std::cout << "_Left_rotate_erase 1" << std::endl;
+					_root = _Left_rotate(current);
+				}
+				else
+				{
+					std::cout << "_Left_rotate_erase 2" << std::endl;
+					node	*parent = current->_p;
+					if (parent->_r == current)
+					{
+						parent->_r = _Left_rotate(current);
+						current->_p->_p = parent;
+					}
+					else
+					{
+						parent->_l = _Left_rotate(current);
+						current->_p->_p = parent;
+					}
+				}
+			}
+
+
+
+            // erase
+				void	erase(iterator pos)
+				{
+					(void)pos;
+				_Print_tree(_root, "**********\n", true);
+
+					 std::cout << "Erase ALPHA" << std::endl;
+					 iterator	n;
+
+					if (_root)
+					{
+						std::cout << "Erase ALPHA 0 -" << pos->first << std::endl;
+						n = find(pos->first);
+						std::cout << "Erase ALPHA 0 bis" << std::endl;
+						std::cout << "ERASE ALPHA 1 : " << pos->first << std::endl;
+						if (n != end())
+							_Delete_node(_root, pos->first);
+						else
+							std::cout << "not found: " << pos->first << std::endl;
+						std::cout << "Erase ALPHA 2" << std::endl;
+					
+					}
+					if (_root)
+						_end->_p = _Max(_root);
+					else
+						_end->_p = NULL;
+
+					// for(iterator it = begin(); it != end(); it++)
+					// 	std::cout << "first = " << it->first << std::endl;
+					// std::cout << "Erase ALPHA END" << std::endl;
+
+				_Print_tree(_root, "**********\n", true);
+
+				}
+
+				void	erase(iterator first, iterator last )
+				{
+					std::cout << "Erase BRAVO" << std::endl;
+
+					map temp(first, last);
+					iterator it = temp.begin();
+					iterator ite = temp.end();
+					ite--;
+
+					for(; it != ite;)
+					{
+						std::cout << "UwU " << it->first << std::endl;
+						erase(it);
+						it++;
+					}
+					std::cout << "UwU " << it->first << std::endl;
+					erase(it);
+
+
+
+					// for (iterator lol = first;lol != last; lol++)
+					// 	std::cout << "UwU " << lol->first << std::endl;
+					
+					// std::cout << "Erase VERIF" << std::endl;
+					
+					// for (;first != last; first++)
+					// {
+					// 	for (iterator lol = first;lol != last; lol++)
+					// 	{
+					// 			std::cout << "UwU " << lol->first << std::endl;
+					// 	}
+					// 	std::cout << "------Erase BRAVO" << std::endl;
+					// 	erase(first);
+					// }
+				}
+
+				size_type erase(const Key &k)
+				{
+					std::cout << "Erase CHARLIE" << std::endl;
+					iterator	tmp = find(k);
+
+					if (tmp == end())
+						return (0);
+					erase(tmp);
+					return (1);
+				}

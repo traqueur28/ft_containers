@@ -6,7 +6,7 @@
 /*   By: jgourlin <jgourlin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:22:50 by jgourlin          #+#    #+#             */
-/*   Updated: 2022/10/01 14:05:10 by jgourlin         ###   ########.fr       */
+/*   Updated: 2022/10/03 19:59:36 by jgourlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,31 +113,6 @@ std::cout << "MAP PHASE 2" << std::endl;
 
 	std::cout << std::endl << "MAP PHASE 4" << std::endl;
 	{
-		PRE::map<int, int>	bravo;
-		for (int i = 0; i <= 9; i++)
-				bravo.insert(PRE::pair<int, int>(i, -i));
-
-		PRE::map<int, int>::iterator it = bravo.begin(), ite = bravo.end();
-		PRE::map<int, int>::reverse_iterator rit = bravo.rbegin(), rite = bravo.rend();
-		PRE::map<int, int>::const_reverse_iterator crit = bravo.rbegin(), crite = bravo.rend();
-
-		(void)ite;
-		(void)rite;
-		(void)it;
-		(void)rit;
-		(void)crite;
-		(void)crit;
-		std::cout << "rbegin first = " <<rit->first << "seconde = " << rit->second << std::endl;
-		std::cout << "end    first = " <<ite->first << "seconde = " << ite->second << std::endl;
-		std::cout << "crbegi first = " <<crit->first << "seconde = " << crit->second << std::endl;
-		std::cout << std::endl << std::endl;
-		crit--;
-		--ite;
-		std::cout << "test  = " << (*crit).first << std::endl;
-		std::cout << "--end  first = " <<ite->first << "seconde = " << ite->second << std::endl;
-
-
-
 
 
 	}
@@ -214,6 +189,24 @@ std::cout << "MAP PHASE 2" << std::endl;
 		std::cout << "UPPER" << std::endl;
 		std::cout << "upper_bound(5) = " << mp.upper_bound(5)->first << std::endl;
 		std::cout << "end" << std::endl;
+
+
+	}
+	std::cout << std::endl << "MAP DOUBLON 6" << std::endl;
+	{
+		PRE::map<int, int> mp;
+		for (int i = 0; i < 9; i++)
+		{
+			mp.insert(PRE::pair<int, int>(i * 3, i*2));
+			std::cout << i * 3 << " " << mp[i * 3] << std::endl;
+		}
+		for (int i = 0; i < 9; i++)
+		{
+			mp.insert(PRE::pair<int, int>(i * 3, 67));
+			std::cout << i * 3 << " " << mp[i * 3] << std::endl;
+		}
+	}
+	{
 
 
 	}

@@ -6,7 +6,7 @@
 /*   By: jgourlin <jgourlin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 11:00:10 by jgourlin          #+#    #+#             */
-/*   Updated: 2022/10/01 14:15:27 by jgourlin         ###   ########.fr       */
+/*   Updated: 2022/10/03 19:12:35 by jgourlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ namespace ft
 			};
 
 			// Member functions
-
 				// (constructor)
 					// Empty
 				explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()):
@@ -95,7 +94,7 @@ namespace ft
 					clear();
 				}
 				// operator=
-				map &operator= (const map &x)
+				map &operator=(const map &x)
 				{
 					_comp = x._comp;
 					_alloc = x._alloc;
@@ -109,7 +108,6 @@ namespace ft
 				allocator_type get_allocator() const{
 					return (_alloc);
 				}
-
 
 			// Element access
 				// at
@@ -143,7 +141,6 @@ namespace ft
 					it = find(k);
 					return it->second;
 				}
-			
 			// Iterators
 				// begin
 				iterator begin(){
@@ -258,7 +255,46 @@ namespace ft
 				}
 			
 				// erase
-				void	erase(iterator pos);
+				void erase(iterator pos)
+				{
+					iterator	n;
+					n = find(pos->first);
+					if (n != end()) // first trouver
+					{
+						_Delete_node(_root, pos->first);
+						if (!_root)
+							_end->_p = NULL;
+						else
+							_end->_p = _Max(_root);
+					}
+				}
+
+				size_type erase(const key_type &k)
+				{
+					iterator	n = find(k);
+
+					if ((n) != end())
+					{
+						erase(n);
+						return (1);
+					}
+					return (0);
+				}
+
+		    	void erase(iterator first, iterator last)
+				{
+					map temp(first, last);
+
+					iterator it = temp.begin();
+					iterator ite = temp.end();
+					ite--;
+					for(; it != ite;)
+					{
+						erase(it);
+						it++;
+					}
+					erase(it);
+				}
 				
 				// swap
 				void swap(map &other)
@@ -330,7 +366,8 @@ namespace ft
 
 				// lower_bound
 				// iterator sur le premier >=
-				iterator lower_bound (const key_type &k){
+				iterator lower_bound(const key_type &k)
+				{
 					node	*tmp;
 					if (empty())
 						return (end());
@@ -343,7 +380,8 @@ namespace ft
 					}
 					return (end());
 				}
-				const_iterator lower_bound (const key_type &k) const{
+				const_iterator lower_bound(const key_type &k) const
+				{
 					node	*tmp;
 
 					if (empty())
@@ -354,14 +392,14 @@ namespace ft
 						if (!_comp(tmp->_v->first, k))
 							return (const_iterator(tmp, _end));
 						tmp = _Next(tmp);
-						
 					}
 					return (end());
 				}
 
 				// upper_bound
 				// iterator sur le premier >
-				iterator upper_bound (const key_type &k){
+				iterator upper_bound (const key_type &k)
+				{
 					node	*tmp;
 					
 					if (empty())
@@ -370,9 +408,7 @@ namespace ft
 					while (tmp)
 					{
 						if (_comp(k, tmp->_v->first))
-						{
 								return (iterator(tmp, _end));
-						}
 						tmp = _Next(tmp);
 					}
 					return (end());
@@ -403,16 +439,11 @@ namespace ft
 					return (value_compare(Compare()));
 				}
 
-
-
-
 		private:
 		
 			typedef node<value_type>	node;
 			typedef typename	allocator_type::template	rebind<node>::other	alloc_node;
 			// typedef std::allocator<ft::node<T > >	alloc_node;
-
-
 
 			allocator_type	_alloc;
 			allocator_type	_alloc_pair;
@@ -436,7 +467,6 @@ namespace ft
 			}
 
 			void	_Init_null(){
-				// _end = _New_node(value_type(key_type(), mapped_type()), NULL, 0);
 				_end = _alloc_node.allocate(1);
 				_end->_l = NULL;
 				_end->_r = NULL;
@@ -450,6 +480,51 @@ namespace ft
 
 			void	_Free_node(node *N)
 			{
+				if (N->_p)// N not _root
+				{
+					if (N->_p->_l == N) // N child LEFT
+					{
+						if (N->_r)
+						{
+							N->_p->_l = N->_r;
+							N->_r->_p = N->_p;
+						}
+						else if (N->_l)
+						{
+							N->_p->_l = N->_l;
+							N->_l->_p = N->_p;
+						}
+						else
+							N->_p->_l = NULL;
+					}
+					else // N child RIGHT
+					{
+						if (N->_r)
+						{
+							N->_r->_p = N->_p;
+							N->_p->_r = N->_r;
+						}
+						else if (N->_l)
+						{
+							N->_p->_r = N->_l;
+							N->_l->_p = N->_p;
+						}
+						else
+							N->_p->_r = NULL;
+					}
+				}
+				else // if root
+				{
+					if (N->_r)
+						_root = N->_r;
+					else if (N->_l)
+						_root = N->_l;
+					else
+						_root = NULL;
+					if (_root)
+						_root->_p = NULL;
+				}
+				
 				if (N->_v)
 				{
 					_alloc_pair.deallocate(N->_v, 1);
@@ -490,9 +565,9 @@ namespace ft
 			void	_Left_left_case(node *current) // Right rotate grandParent
 			{
 				bool tmp = current->_color;
+
 				current->_color = current->_l->_color;
 				current->_l->_color = tmp;
-
 				if (current == _root)
 				{
 					_root = _Right_rotate(current);
@@ -517,9 +592,9 @@ namespace ft
 			void	_Right_right_case(node *current) // Left rotate grandParent
 			{
 				bool tmp = current->_color;
+
 				current->_color = current->_r->_color;
 				current->_r->_color = tmp;
-
 				if (current == _root)
 				{
 					_root = _Left_rotate(current);
@@ -544,11 +619,10 @@ namespace ft
 			void	_Left_right_case(node *current) // left par - right gp
 			{
 				bool tmp = current->_color;
+
 				current->_color = current->_l->_r->_color;
 				current->_l->_r->_color = tmp;
-
 				current->_l = _Left_rotate(current->_l);
-
 				if (current == _root)
 				{
 					_root = _Right_rotate(current);
@@ -573,11 +647,10 @@ namespace ft
 			void	_Right_left_case(node *current) // right par - left gp
 			{
 				bool tmp = current->_color;
+
 				current->_color = current->_r->_l->_color;
 				current->_r->_l->_color = tmp;
-
 				current->_r = _Right_rotate(current->_r);
-
 				if (current == _root)
 				{
 					_root = _Left_rotate(current);
@@ -604,20 +677,15 @@ namespace ft
 			{
 				if (val.first == current->_v->first)
 					return (NULL);
-
 				if (_comp(current->_v->first, val.first) && current->_r)
-				{
 					return (_Insert_node(current->_r, val));
-				}
 				else if (_comp(current->_v->first, val.first) && !current->_r)
 				{
 					current->_r = _New_node(val, current, 1);
 					return (current->_r); //right
 				}
 				else if (_comp(val.first, current->_v->first) && current->_l)
-				{
 					return (_Insert_node(current->_l, val));
-				}
 				else if (_comp(val.first, current->_v->first) && !current->_l)
 				{
 					current->_l = _New_node(val, current, 1);
@@ -674,6 +742,185 @@ namespace ft
 
 			}
 
+			void	_Right_rotate_erase(node *current)
+			{
+				if (current == _root)
+				{
+					_root = _Right_rotate(current);
+					_root->_p = NULL;
+				}
+				else
+				{
+					node	*parent = current->_p;
+					if (parent->_r == current)
+					{
+						parent->_r = _Right_rotate(current);
+						current->_p->_p = parent;
+					}
+					else
+					{
+						parent->_l = _Right_rotate(current);
+						current->_p->_p = parent;
+					}
+				}
+			}
+			
+			void	_Left_rotate_erase(node *current)
+			{
+				if (current == _root)
+				{
+					_root = _Left_rotate(current);
+					_root->_p = NULL;
+				}
+				else
+				{
+					node	*parent = current->_p;
+					if (parent->_r == current)
+					{
+						parent->_r = _Left_rotate(current);
+						current->_p->_p = parent;
+					}
+					else
+					{
+						parent->_l = _Left_rotate(current);
+						current->_p->_p = parent;
+					}
+				}
+			}
+
+			void	_Delete_coloring(node *current)
+			{
+				node	*sibling;
+				node	*parent;
+
+				if (current == _root) // if root then black
+				{
+					current->_color = 0;
+					return ;
+				}
+				parent = current->_p;
+				sibling = _Sibling(current);
+				if (!sibling) // No sibling
+					_Delete_coloring(parent);
+				else if (sibling->_color) // C Sibling RED
+				{
+					parent->_color = 1;
+       				sibling->_color = 0;
+					if (sibling == parent->_l) // sibling == left
+						_Right_rotate_erase(parent);
+					else
+						_Left_rotate_erase(parent);
+					_Delete_coloring(current);
+				}
+				else // Sibling BLACK
+				{
+					// 1+ child RED
+					if ((sibling->_r && sibling->_r->_color) || (sibling->_l && sibling->_l->_color))
+					{	
+						if (sibling->_l && sibling->_l->_color) // _l RED
+						{
+							if (sibling == parent->_l) // sibling == left
+							{
+								sibling->_l->_color = sibling->_color;
+								sibling->_color = parent->_color;
+								_Right_rotate_erase(parent);
+							}
+							else
+							{
+								sibling->_l->_color = parent->_color;
+              					_Right_rotate_erase(sibling);
+              					_Left_rotate_erase(parent);
+							}
+						}
+						else
+						{
+							if (sibling == parent->_l) // sibling == left
+							{
+								sibling->_r->_color = parent->_color;
+              					_Left_rotate_erase(sibling);
+              					_Right_rotate_erase(parent);
+							}
+							else
+							{
+								sibling->_r->_color = sibling->_color;
+              					sibling->_color = parent->_color;
+              					_Left_rotate_erase(parent);
+							}
+						}
+					}
+					else // 2 child BLACK
+					{
+						sibling->_color = 1;
+						if (!parent->_color) // if Parent BLACK
+							_Delete_coloring(parent);
+						else
+							parent->_color = 0;
+					}
+				}
+			}
+
+			void	_Delete_node(node *current, const key_type &k)
+			{
+				node	*tmp = NULL;
+
+ 				if (_comp(k, current->_v->first)) // k < current
+					_Delete_node(current->_l, k);
+				else if (_comp(current->_v->first, k)) // k > current
+					_Delete_node(current->_r, k);
+				else // k == current
+				{
+					if (!current->_l && !current->_r) // no child
+					{
+						if (!current->_color) // if double black
+							_Delete_coloring(current);
+						_Free_node(current);
+						_size--;
+					}
+					else if (!current->_l) // 1 child right
+					{
+						tmp = current->_r;
+						if (tmp->_color || current->_color) // if 1 RED tmp = BLACK
+							tmp->_color = 0;
+						else // double black
+							_Delete_coloring(current);
+						_Free_node(current);
+						_size--;
+					}
+					else if (!current->_r) // 1 child left
+					{
+						tmp = current->_l;
+						if (tmp->_color || current->_color) // if 1 RED tmp = BLACK
+							tmp->_color = 0;
+						else // double black
+							_Delete_coloring(current);
+						_Free_node(current);
+						_size--;
+					}
+					else // 2 child
+					{
+						_Swap_node_value(current, _Prev(current));
+						_Delete_node(current->_l, k);
+					}
+				}
+			}
+
+			void	_Swap_node_value(node *n1, node *n2)
+			{
+				node	k;
+
+				k._v = n1->_v;
+				n1->_v = n2->_v;
+				n2->_v = k._v;
+			}
+
+			node	*_Sibling(node *current)
+			{
+				if (current->_p->_r == current)
+					return current->_p->_l;
+				else
+					return current->_p->_r;
+			}
+
 			void	_Travel(node *N, const Key &key, size_t *res) const
 			{
 				if (key == N->_v->first)
@@ -694,11 +941,7 @@ namespace ft
 						_Clear_tree(N->_r);
 					_Free_node(N);
 				}
-				//_root = NULL;
 			}
-
-			// 	return (!_comp(k1, k2) && !_comp(k2, k1));
-			// }
 
 			node	*_Min(node *p) const
 			{
@@ -743,14 +986,11 @@ namespace ft
 				while (tmp->_p)
 				{
 					tmp = tmp->_p;
-					if (_comp(tmp->_v->first, p->v->first)) //tmp->_v <= p->_v
+					if (_comp(tmp->_v->first, p->_v->first)) //tmp->_v <= p->_v
 						return (tmp);
 				}
 				return (NULL);
-		}
-
-
-
+			}
 	}; // map
 
 	// Non-member functions

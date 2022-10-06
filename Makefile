@@ -23,7 +23,7 @@ CLASS_PATH = class
 CFILES =	Algorithm/equal.hpp Algorithm/lexicographical_compare.hpp \
 			Iterator/iterator_traits.hpp Iterator/reverse_iterator.hpp Iterator/map_iterator.hpp Iterator/map_reverse_iterator.hpp \
 			Type_traits/enable_if.hpp Type_traits/is_integral.hpp \
-			vector.hpp stack.hpp map.hpp\
+			vector.hpp stack.hpp map.hpp \
 			Utility/proto.hpp Utility/pair.hpp \
 			Map/node.hpp
 
@@ -33,7 +33,7 @@ CLASS = $(addprefix $(CLASS_PATH)/, $(CFILES))
 SRCS_PATH = src
 
 FILES = main.cpp \
-		vector_main.cpp stack_main.cpp map_main.cpp
+		vector_main.cpp stack_main.cpp map_main.cpp set_main.cpp
 
 SRCS = $(addprefix $(SRCS_PATH)/, $(FILES))
 

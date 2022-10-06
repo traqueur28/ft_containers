@@ -6,7 +6,7 @@
 /*   By: jgourlin <jgourlin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 11:00:10 by jgourlin          #+#    #+#             */
-/*   Updated: 2022/10/03 19:12:35 by jgourlin         ###   ########.fr       */
+/*   Updated: 2022/10/04 19:27:22 by jgourlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,7 +207,7 @@ namespace ft
 				}
 				// insert
 					// single element
-				pair<iterator,bool>	insert(const value_type &val)
+				ft::pair<iterator,bool>	insert(const value_type &val)
 				{
 					size_type	size_tmp = _size;
 					node	*tmp;
@@ -220,7 +220,7 @@ namespace ft
 					{
 						tmp = _Insert_node(_root, val);
 						if (!tmp)
-							return pair<iterator, bool>(find(val.first), size_tmp != size());
+							return ft::pair<iterator, bool>(find(val.first), size_tmp != size());
 						_size++;
 						_Coloring(tmp);
 					}
@@ -236,7 +236,7 @@ namespace ft
 							_end->_p = node_max;
 						}
 					}
-					return pair<iterator, bool>(find(val.first), size_tmp != size());
+					return ft::pair<iterator, bool>(find(val.first), size_tmp != size());
 				}
 
 					// with hint
@@ -443,7 +443,6 @@ namespace ft
 		
 			typedef node<value_type>	node;
 			typedef typename	allocator_type::template	rebind<node>::other	alloc_node;
-			// typedef std::allocator<ft::node<T > >	alloc_node;
 
 			allocator_type	_alloc;
 			allocator_type	_alloc_pair;

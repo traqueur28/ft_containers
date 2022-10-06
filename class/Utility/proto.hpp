@@ -6,7 +6,7 @@
 /*   By: jgourlin <jgourlin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/20 14:30:44 by jgourlin          #+#    #+#             */
-/*   Updated: 2022/10/03 19:57:22 by jgourlin         ###   ########.fr       */
+/*   Updated: 2022/10/06 16:32:46 by jgourlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,6 @@
 # include <vector>
 # include <stack>
 # include <map>
-# include <set>
-
 
 // OTHER
 # include <iostream>
@@ -54,5 +52,8 @@
 
 // map_main.cpp
 	void	map_main();
+
+// set_main.cpp
+void	set_main();
 
 # endif

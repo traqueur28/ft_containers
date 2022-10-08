@@ -6,7 +6,7 @@
 /*   By: jgourlin <jgourlin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:22:50 by jgourlin          #+#    #+#             */
-/*   Updated: 2022/10/08 05:14:32 by jgourlin         ###   ########.fr       */
+/*   Updated: 2022/10/08 05:41:07 by jgourlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,45 @@ void	map_main()
 	}
 	title("Insert and Delete", CYAN_, 1);
 	{
-		PRE::map<int, int> alpha;
+		PRE::map<int, std::string> alpha;
+
+
+
+		std::cout << "alpha.insert(1,\"lol\")" << std::endl;
+		alpha.insert(PRE::pair<int, std::string>(1, "lol"));
+
+		std::cout << "alpha.insert(2,\"la\")" << std::endl;
+		alpha.insert(PRE::pair<int, std::string>(2, "la"));
+
+		std::cout << "alpha.insert(3,\"truc\")" << std::endl;
+		alpha.insert(PRE::pair<int, std::string>(3, "truc"));
+
+		std::cout << "alpha.insert(4,\"thing\")" << std::endl;
+		alpha.insert(PRE::pair<int, std::string>(4, "thing"));
+
+		std::cout << "alpha.insert(4,\"thing\")" << std::endl;
+		alpha.insert(PRE::pair<int, std::string>(4, "thing"));
+
+		std::cout << "alpha.erase(2)" << std::endl;
+		alpha.erase(2);
+
+		PRE::map<int, std::string> beta;
+		beta[-1] = "beta-1";
+		beta[-42] = "beta-42";
+		beta[-3] = "beta-3";
+		beta[-666] = "beta-666";
+
+		std::cout << "alpha.insert(beta.begin(), beta.end())" << std::endl;
+		alpha.insert(beta.begin(), beta.end());
+
+		PRE::map<int, std::string>::iterator it = alpha.begin();
+		for(;it!= alpha.end(); it++)
+			std::cout << "first = " << it->first << " second = " << it->second << std::endl;
+		std::cout << "alpha.empty() = " << alpha.empty() << std::endl;
+		alpha.clear();
+		std::cout << "alpha.clear()" << std::endl << "alpha.empty() = " << alpha.empty() << std::endl;
+		for(it = alpha.begin();it!= alpha.end(); it++)
+			std::cout << "first = " << it->first << " second = " << it->second << std::endl;
+
 	}
 }

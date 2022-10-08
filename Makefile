@@ -33,7 +33,7 @@ CLASS = $(addprefix $(CLASS_PATH)/, $(CFILES))
 SRCS_PATH = src
 
 FILES = main.cpp \
-		vector_main.cpp stack_main.cpp map_main.cpp set_main.cpp
+		vector_main.cpp stack_main.cpp map_main.cpp
 
 SRCS = $(addprefix $(SRCS_PATH)/, $(FILES))
 

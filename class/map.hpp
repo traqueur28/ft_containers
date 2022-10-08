@@ -6,7 +6,7 @@
 /*   By: jgourlin <jgourlin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 11:00:10 by jgourlin          #+#    #+#             */
-/*   Updated: 2022/10/04 19:27:22 by jgourlin         ###   ########.fr       */
+/*   Updated: 2022/10/08 16:23:22 by jgourlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ namespace ft
 				// (destructor)
 				~map(){
 					clear();
+					_Free_node(_end);
 				}
 				// operator=
 				map &operator=(const map &x)

@@ -6,7 +6,7 @@
 /*   By: jgourlin <jgourlin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/17 11:43:47 by jgourlin          #+#    #+#             */
-/*   Updated: 2022/09/29 11:10:56 by jgourlin         ###   ########.fr       */
+/*   Updated: 2022/10/08 18:30:03 by jgourlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,21 +19,33 @@
 # include <string>
 # include <compare>
 
+# include <time.h>
+#include <math.h> 
 
-# include "../class/Iterator/reverse_iterator.hpp"
-# include "../class/vector.hpp"
 # include "../class/Utility/proto.hpp"
 
 int main ()
 {
-		std::cout << RED__ << CHECK <<  DEFAU << std::endl;
+	clock_t deb;
+	clock_t end;
 
-		//vector_main();
-		
-		//stack_main();
+	 	 std::cout << RED__ << CHECK <<  DEFAU << std::endl;
 
+	deb = clock();
+		vector_main();
+	end = clock() - deb;
+	std::cout << "vector timer: "<< end << std::endl;
+	
+
+	deb = clock();
+		stack_main();
+	end = clock() - deb;
+	std::cout << "stack timer: "<< end << std::endl;
+
+	deb = clock();
 		map_main();
-
+	end = clock() - deb;
+	std::cout << "map timer: "<< end << std::endl;
 
 	return (0);
 }
